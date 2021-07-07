@@ -16,6 +16,7 @@
 #include "xgboost/json.h"
 #include "xgboost/base.h"
 #include "xgboost/tree_model.h"
+#include "boost/container/stable_vector.hpp"
 
 #if defined(XGBOOST_STRICT_R_MODE) && XGBOOST_STRICT_R_MODE == 1
 #define OBSERVER_PRINT LOG(INFO)
@@ -66,7 +67,7 @@ class TrainingObserver {
   template <typename T>
   void Observe(common::Span<T> span, std::string name,
                size_t n = std::numeric_limits<std::size_t>::max()) {
-    std::vector<T> copy(span.size());
+	  boost::container::stable_vector<T> copy(span.size());
     std::copy(span.cbegin(), span.cend(), copy.begin());
     this->Observe(copy, name, n);
   }

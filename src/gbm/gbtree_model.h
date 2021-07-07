@@ -16,6 +16,7 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include "boost/container/stable_vector.hpp"
 
 namespace xgboost {
 
@@ -131,7 +132,7 @@ struct GBTreeModel : public Model {
   /*! \brief vector of trees stored in the model */
   std::vector<std::unique_ptr<RegTree> > trees;
   /*! \brief for the update process, a place to keep the initial trees */
-  std::vector<std::unique_ptr<RegTree> > trees_to_update;
+  boost::container::stable_vector<std::unique_ptr<RegTree> > trees_to_update;
   /*! \brief some information indicator of the tree, reserved */
   std::vector<int> tree_info;
 };

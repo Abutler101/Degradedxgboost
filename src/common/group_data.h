@@ -20,6 +20,7 @@
 #include <utility>
 
 #include "xgboost/base.h"
+#include "boost/container/small_vector.hpp"
 
 namespace xgboost {
 namespace common {
@@ -159,7 +160,7 @@ class ParallelGroupBuilder {
   /*! \brief index of nonzero entries in each row */
   std::vector<ValueType> &data_;
   /*! \brief thread local data structure */
-  std::vector<std::vector<SizeType> > thread_rptr_;
+  boost::container::small_vector<std::vector<SizeType>,5 > thread_rptr_;
   /** \brief Used when rows being pushed into the builder are strictly above some number. */
   size_t base_row_offset_;
   /** \brief Used for row major adapters to handle reduced thread local memory allocation */

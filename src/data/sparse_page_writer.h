@@ -15,6 +15,7 @@
 #include <utility>
 #include <memory>
 #include <functional>
+#include "boost/container/stable_vector.hpp"
 
 #if DMLC_ENABLE_STD_THREAD
 #include <dmlc/concurrency.h>
@@ -163,7 +164,7 @@ class SparsePageWriter {
   /*! \brief clock_pointer */
   size_t clock_ptr_;
   /*! \brief writer threads */
-  std::vector<std::unique_ptr<std::thread>> workers_;
+  boost::container::stable_vector<std::unique_ptr<std::thread>> workers_;
   /*! \brief recycler queue */
   dmlc::ConcurrentBlockingQueue<std::shared_ptr<T>> qrecycle_;
   /*! \brief worker threads */

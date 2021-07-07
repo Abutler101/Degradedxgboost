@@ -12,6 +12,8 @@
 #include "xgboost/base.h"
 
 #include "param.h"
+#include "boost/container/stable_vector.hpp"
+#include "boost/container/small_vector.hpp"
 
 namespace xgboost {
 /*!
@@ -27,10 +29,10 @@ class FeatureInteractionConstraintHost {
   std::vector< std::unordered_set<bst_feature_t> > interaction_constraints_;
   // int_cont_[nid] contains the set of all feature IDs that are allowed to
   //   be used for a split at node nid
-  std::vector< std::unordered_set<bst_feature_t> > node_constraints_;
+  boost::container::stable_vector< std::unordered_set<bst_feature_t> > node_constraints_;
   // splits_[nid] contains the set of all feature IDs that have been used for
   //   splits in node nid and its parents
-  std::vector< std::unordered_set<bst_feature_t> > splits_;
+  boost::container::small_vector< std::unordered_set<bst_feature_t> , 5> splits_;
   // string passed by user.
   std::string interaction_constraint_str_;
   // number of features in DMatrix/Booster

@@ -20,6 +20,7 @@
 #include "rabit/internal/utils.h"
 #include "rabit/internal/engine.h"
 #include "rabit/internal/socket.h"
+#include "boost/container/small_vector.hpp"
 
 #ifdef RABIT_CXXTESTDEFS_H
 #define private   public
@@ -513,7 +514,7 @@ class AllreduceBase : public IEngine {
   // rank of parent node, can be -1
   int parent_rank;  // NOLINT
   // sockets of all links this connects to
-  std::vector<LinkRecord> all_links;  // NOLINT
+  boost::container::small_vector<LinkRecord,5> all_links;  // NOLINT
   // used to record the link where things goes wrong
   LinkRecord *err_link;  // NOLINT
   // all the links in the reduction tree connection
@@ -522,7 +523,7 @@ class AllreduceBase : public IEngine {
   LinkRecord *ring_prev, *ring_next;  // NOLINT
   //----- meta information-----
   // list of enviroment variables that are of possible interest
-  std::vector<std::string> env_vars;  // NOLINT
+  boost::container::small_vector<std::string,5> env_vars;  // NOLINT
   // unique identifier of the possible job this process is doing
   // used to assign ranks, optional, default to NULL
   std::string task_id;  // NOLINT

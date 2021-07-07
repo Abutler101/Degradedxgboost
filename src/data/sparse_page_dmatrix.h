@@ -16,6 +16,7 @@
 
 #include "ellpack_page_source.h"
 #include "sparse_page_source.h"
+#include "boost/container/small_vector.hpp"
 
 namespace xgboost {
 namespace data {
@@ -58,7 +59,7 @@ class SparsePageDMatrix : public DMatrix {
   // the cache prefix
   std::string cache_info_;
   // Store column densities to avoid recalculating
-  std::vector<float> col_density_;
+  boost::container::small_vector<float,3> col_density_;
 
   bool EllpackExists() const override {
     return static_cast<bool>(ellpack_source_);

@@ -15,6 +15,7 @@
 #include "../gbm/gblinear_model.h"
 #include "../common/random.h"
 #include "../common/threading_utils.h"
+#include "boost/container/small_vector.hpp"
 
 namespace xgboost {
 namespace linear {
@@ -299,7 +300,7 @@ class ShuffleFeatureSelector : public FeatureSelector {
   }
 
  protected:
-  std::vector<bst_uint> feat_index_;
+  boost::container::small_vector<bst_uint,5> feat_index_;
 };
 
 /**
@@ -385,8 +386,8 @@ class GreedyFeatureSelector : public FeatureSelector {
 
  protected:
   bst_uint top_k_;
-  std::vector<bst_uint> counter_;
-  std::vector<std::pair<double, double>> gpair_sums_;
+  boost::container::small_vector<bst_uint,5> counter_;
+  boost::container::small_vector<std::pair<double, double>,5> gpair_sums_;
 };
 
 /**
@@ -472,10 +473,10 @@ class ThriftyFeatureSelector : public FeatureSelector {
 
  protected:
   bst_uint top_k_;
-  std::vector<bst_float> deltaw_;
-  std::vector<size_t> sorted_idx_;
-  std::vector<bst_uint> counter_;
-  std::vector<std::pair<double, double>> gpair_sums_;
+  boost::container::small_vector<bst_float,5> deltaw_;
+  boost::container::small_vector<size_t,5> sorted_idx_;
+  boost::container::small_vector<bst_uint,5> counter_;
+  boost::container::small_vector<std::pair<double, double>,5> gpair_sums_;
 };
 
 inline FeatureSelector *FeatureSelector::Create(int choice) {

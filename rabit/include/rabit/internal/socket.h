@@ -51,6 +51,8 @@ using sock_size_t = int;
 using SOCKET = int;
 using sock_size_t = size_t;  // NOLINT
 #endif  // defined(_WIN32)
+#include "boost/container/flat_map.hpp"
+#include "boost/container/small_vector.hpp"
 
 #define IS_MINGW() defined(__MINGW32__)
 
@@ -620,7 +622,7 @@ struct PollHelper {
    * \return
    */
   inline void Poll(std::chrono::seconds timeout) {  // NOLINT(*)
-    std::vector<pollfd> fdset;
+    boost::container::small_vector<pollfd,5> fdset;
     fdset.reserve(fds.size());
     for (auto kv : fds) {
       fdset.push_back(kv.second);
@@ -642,7 +644,7 @@ struct PollHelper {
     }
   }
 
-  std::unordered_map<SOCKET, pollfd> fds;
+  boost::container::flat_map<SOCKET, pollfd> fds;
 };
 }  // namespace utils
 }  // namespace rabit

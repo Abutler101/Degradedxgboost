@@ -10,6 +10,8 @@
 #include <cstdio>
 #include <sstream>
 #include "./xgboost_R.h"
+#include "boost/container/stable_vector.hpp"
+#include "boost/container/small_vector.hpp"
 
 /*!
  * \brief macro to annotate begin of api
@@ -92,7 +94,7 @@ SEXP XGDMatrixCreateFromMat_R(SEXP mat,
   } else {
     din = REAL(mat);
   }
-  std::vector<float> data(nrow * ncol);
+  boost::container::small_vector<float,6> data(nrow * ncol);
   dmlc::OMPException exc;
   #pragma omp parallel for schedule(static)
   for (omp_ulong i = 0; i < nrow; ++i) {
@@ -124,9 +126,9 @@ SEXP XGDMatrixCreateFromCSC_R(SEXP indptr,
   size_t nindptr = static_cast<size_t>(length(indptr));
   size_t ndata = static_cast<size_t>(length(data));
   size_t nrow = static_cast<size_t>(INTEGER(num_row)[0]);
-  std::vector<size_t> col_ptr_(nindptr);
-  std::vector<unsigned> indices_(ndata);
-  std::vector<float> data_(ndata);
+  boost::container::small_vector<size_t,5> col_ptr_(nindptr);
+  boost::container::small_vector<unsigned,5> indices_(ndata);
+  boost::container::small_vector<float,5> data_(ndata);
 
   for (size_t i = 0; i < nindptr; ++i) {
     col_ptr_[i] = static_cast<size_t>(p_indptr[i]);
@@ -155,7 +157,7 @@ SEXP XGDMatrixSliceDMatrix_R(SEXP handle, SEXP idxset) {
   SEXP ret;
   R_API_BEGIN();
   int len = length(idxset);
-  std::vector<int> idxvec(len);
+  boost::container::stablevector<int> idxvec(len);
   for (int i = 0; i < len; ++i) {
     idxvec[i] = INTEGER(idxset)[i] - 1;
   }
@@ -198,7 +200,7 @@ SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
                                     CHAR(asChar(field)),
                                     BeginPtr(vec), len));
   } else {
-    std::vector<float> vec(len);
+	  boost::container::small_vector<float,5> vec(len);
     #pragma omp parallel for schedule(static)
     for (int i = 0; i < len; ++i) {
       exc.Run([&]() {
@@ -335,7 +337,7 @@ SEXP XGBoosterEvalOneIter_R(SEXP handle, SEXP iter, SEXP dmats, SEXP evnames) {
       << "dmats and evnams must have same length";
   int len = length(dmats);
   std::vector<void*> vec_dmats;
-  std::vector<std::string> vec_names;
+  boost::container::small_vector<std::string,5> vec_names;
   std::vector<const char*> vec_sptr;
   for (int i = 0; i < len; ++i) {
     vec_dmats.push_back(R_ExternalPtrAddr(VECTOR_ELT(dmats, i)));

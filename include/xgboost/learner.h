@@ -21,6 +21,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "boost/container/small_vector.hpp"
 
 namespace xgboost {
 
@@ -49,7 +50,7 @@ struct XGBAPIThreadLocalEntry {
   /*! \brief result holder for returning string pointers */
   std::vector<const char *> ret_vec_charp;
   /*! \brief returning float vector. */
-  std::vector<bst_float> ret_vec_float;
+  boost::container::small_vector<bst_float,5> ret_vec_float;
   /*! \brief temp variable of gradient pairs. */
   std::vector<GradientPair> tmp_gpair;
   /*! \brief Temp variable for returning prediction result. */
